@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Fanad for Home Assistant — install guide</title>
-<meta name="description" content="Install Fanad on Home Assistant: a local-first scratchpad for tasks, notes, lists and timers. Your data, your LLM, your box.">
+<title>Fanad for Home Assistant — the no-nag scratchpad, on steroids</title>
+<meta name="description" content="Fanad fills the gap so Home Assistant can store personal tasks and memories without becoming a full-on LLM assistant. Local-first tasks, notes, lists and timers; a Telegram bot for the road, a rich web UI at home. A local LLM parses what you type — it never invents, and it never acts on your house.">
 <meta name="theme-color" content="#08101a">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='24' cy='24' r='23' fill='%23123b4f'/%3E%3Cpath d='M21 34 L22 16 L26 16 L27 34 Z' fill='%23fff'/%3E%3Crect x='19.5' y='14.6' width='9' height='2.2' rx='1' fill='%23fff'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,92 +13,127 @@
 <style>
 :root{
   --navy:#08101a; --navy-2:#0b1626;
-  --glass:rgba(10,22,37,.74); --glass-2:rgba(5,13,24,.66);
-  --text:#e9f1f6; --text-2:#a9bfce; --text-3:#7d94a5;
+  --glass:rgba(10,22,37,.72); --glass-soft:rgba(10,22,37,.55);
+  --text:#e9f1f6; --text-2:#aec2d0; --text-3:#7d94a5;
   --gold:#f3c66a; --gold-ink:#12233a; --aqua:#7fd0e0;
-  --line:rgba(127,208,224,.16); --line-2:rgba(127,208,224,.28);
+  --line:rgba(127,208,224,.16); --line-2:rgba(127,208,224,.30);
   --font-display:"Fraunces","Iowan Old Style",Palatino,Georgia,serif;
   --font-body:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --font-mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
-  --shell:41rem; --sea:720px;
+  --shell:46rem; --sea:760px;
+  /* generous, fluid spacing scale */
+  --s3:.75rem; --s4:1rem; --s5:1.5rem; --s6:2rem; --s7:3rem;
+  --section-pad:clamp(2rem,1.4rem+3vw,3.4rem);
+  --section-gap:clamp(2.4rem,1.6rem+4vw,4.5rem);
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;font-family:var(--font-body);font-size:1.05rem;line-height:1.62;color:var(--text);
+body{margin:0;font-family:var(--font-body);font-size:1.06rem;line-height:1.68;color:var(--text);
   background:var(--navy);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
 
 /* Animated sea — the shared Ocean sim as a fixed portrait column behind everything. */
 .sea{position:fixed;top:0;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,var(--sea));
-  z-index:0;pointer-events:none;border-inline:1px solid rgba(127,208,224,.08)}
+  z-index:0;pointer-events:none;border-inline:1px solid rgba(127,208,224,.07)}
 .sea canvas{width:100%;height:100%;display:block;image-rendering:pixelated}
-/* a soft vertical scrim so type stays legible over the brightest daytime water */
-.sea::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,16,26,.55),rgba(8,16,26,.30) 30%,rgba(8,16,26,.45))}
+.sea::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,16,26,.5),rgba(8,16,26,.28) 30%,rgba(8,16,26,.42))}
 
-.wrap{position:relative;z-index:1;max-width:var(--shell);margin:0 auto;padding:0 clamp(1.1rem,5vw,1.6rem)}
-h1,h2,h3{font-family:var(--font-display);font-weight:600;line-height:1.1;letter-spacing:-.011em;color:#fff;margin:0 0 .6rem}
-h1{font-size:clamp(2.4rem,1.5rem+3.8vw,3.6rem);text-shadow:0 2px 24px rgba(0,0,0,.45)}
-h2{font-size:clamp(1.55rem,1.2rem+1.7vw,2.05rem)}
-h3{font-size:1.18rem;line-height:1.3}
-p{margin:0 0 1rem}
+.wrap{position:relative;z-index:1;max-width:var(--shell);margin:0 auto;padding:0 clamp(1.2rem,5vw,1.9rem)}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.12;letter-spacing:-.012em;color:#fff;margin:0}
+h1{font-size:clamp(2.6rem,1.6rem+4.4vw,4rem);text-shadow:0 2px 28px rgba(0,0,0,.5)}
+h2{font-size:clamp(1.7rem,1.25rem+2vw,2.35rem)}
+h3{font-size:1.2rem;line-height:1.3}
+p{margin:0}
 a{color:var(--gold);text-underline-offset:2px}
 strong{color:#fff}
 em{color:var(--aqua);font-style:normal}
-code{font-family:var(--font-mono);font-size:.88em;background:rgba(4,12,22,.7);color:#dfeaf0;padding:.12em .42em;border:1px solid var(--line)}
+code{font-family:var(--font-mono);font-size:.87em;background:rgba(4,12,22,.7);color:#dfeaf0;padding:.12em .42em;border:1px solid var(--line);white-space:nowrap}
+.kicker{font-family:var(--font-mono);font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;display:inline-flex;align-items:center;gap:.7em;margin:0 0 var(--s4)}
+.kicker::before{content:"";width:1.7em;height:2px;background:var(--gold);opacity:.7}
 
 /* Header */
-header{position:sticky;top:0;z-index:5;background:rgba(6,13,22,.72);backdrop-filter:blur(10px);
-  border-bottom:1px solid var(--line)}
-.bar{display:flex;align-items:center;gap:.7rem;max-width:var(--shell);margin:0 auto;padding:.8rem clamp(1.1rem,5vw,1.6rem)}
+header{position:sticky;top:0;z-index:5;background:rgba(6,13,22,.7);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:.7rem;max-width:var(--shell);margin:0 auto;padding:.85rem clamp(1.2rem,5vw,1.9rem)}
 .bar svg{width:32px;height:32px;flex:none}
 .brand{font-family:var(--font-display);font-weight:600;font-size:1.2rem;letter-spacing:-.01em;color:#fff}
 .bar .spacer{flex:1}
-.bar nav a{color:var(--text-2);text-decoration:none;font-size:.9rem;margin-left:1.05rem}
+.bar nav a{color:var(--text-2);text-decoration:none;font-size:.9rem;margin-left:1.15rem}
 .bar nav a:hover{color:var(--gold)}
-@media(max-width:600px){.bar nav a{display:none}.bar nav a:last-child{display:inline}}
+@media(max-width:640px){.bar nav a{display:none}.bar nav a.gh{display:inline}}
 
-/* Hero — sits over open water, lighter scrim */
-.hero{padding:clamp(2.8rem,1.5rem+6vw,5.5rem) 0 clamp(1.6rem,1rem+3vw,2.6rem);text-align:center}
-.kicker{font-size:.76rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;margin:0 0 1rem}
-.hero p.lead{font-size:1.18rem;color:#dbe7ee;max-width:36ch;margin-inline:auto;text-shadow:0 1px 12px rgba(0,0,0,.4)}
-.cta{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.6rem;background:var(--gold);color:var(--gold-ink);
-  text-decoration:none;font-weight:600;font-size:1rem;padding:.75rem 1.4rem;border:1px solid #d8ab4e;
-  box-shadow:0 10px 30px -8px rgba(243,198,106,.5)}
-.cta:hover{transform:translateY(-1px);box-shadow:0 14px 34px -8px rgba(243,198,106,.6)}
-.trust{margin:1.8rem auto 0;max-width:34rem;padding:.9rem 1.15rem;background:var(--glass);border:1px solid var(--line);
-  backdrop-filter:blur(8px);font-size:.95rem;color:var(--text-2);text-align:left}
-.trust strong{color:#fff}
+/* Hero — open over the water */
+.hero{text-align:center;padding:clamp(3.4rem,2rem+7vw,7rem) 0 clamp(2.6rem,1.5rem+4vw,4rem)}
+.hero .tagline{font-family:var(--font-display);font-weight:500;font-size:clamp(1.3rem,1rem+1.4vw,1.7rem);
+  color:#eaf3f8;line-height:1.32;max-width:30ch;margin:var(--s5) auto 0;text-shadow:0 1px 16px rgba(0,0,0,.45)}
+.hero .lead{font-size:1.12rem;color:#cfdde7;max-width:52ch;margin:var(--s5) auto 0;text-shadow:0 1px 12px rgba(0,0,0,.4)}
+.badges{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem;margin:var(--s6) auto 0;max-width:44rem;
+  font-family:var(--font-mono);font-size:.72rem}
+.badges span{border:1px solid var(--line-2);background:rgba(8,18,30,.5);backdrop-filter:blur(6px);
+  padding:.35em .8em;color:var(--text-2);text-transform:uppercase;letter-spacing:.07em}
+.badges span strong{color:var(--gold)}
+.actions{display:flex;flex-wrap:wrap;justify-content:center;gap:.9rem;margin-top:var(--s6)}
+.cta{display:inline-flex;align-items:center;gap:.5rem;background:var(--gold);color:var(--gold-ink);text-decoration:none;
+  font-weight:600;font-size:1rem;padding:.8rem 1.5rem;border:1px solid #d8ab4e;box-shadow:0 10px 30px -8px rgba(243,198,106,.5)}
+.cta:hover{transform:translateY(-1px)}
+.cta.ghost{background:rgba(8,18,30,.5);color:var(--text);border-color:var(--line-2);box-shadow:none;backdrop-filter:blur(6px)}
+.cta.ghost:hover{border-color:var(--gold);color:var(--gold)}
 
-/* Content cards — glass over the sea */
-section{margin:clamp(1.2rem,1rem+2vw,2rem) 0;padding:clamp(1.5rem,1rem+2.5vw,2.4rem);
-  background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(9px);
-  box-shadow:0 24px 60px -30px rgba(0,0,0,.7)}
-section > p{color:var(--text-2)}
-section > p strong,section li strong{color:#fff}
+/* Content cards — glass over the sea, roomy */
+section{margin:var(--section-gap) 0;padding:var(--section-pad);background:var(--glass);border:1px solid var(--line);
+  backdrop-filter:blur(9px);box-shadow:0 30px 70px -34px rgba(0,0,0,.75)}
+section > h2{margin-bottom:var(--s3)}
+.section-lead{color:var(--text-2);max-width:60ch;margin-top:var(--s4);font-size:1.08rem}
+section p + p{margin-top:var(--s4)}
 
-.step{display:grid;grid-template-columns:2.1rem 1fr;gap:1rem;margin:1.4rem 0}
-.step .n{font-family:var(--font-display);font-weight:600;font-size:1.2rem;color:var(--gold);
-  width:2.1rem;height:2.1rem;display:grid;place-items:center;border:1.5px solid var(--gold);border-radius:50%}
-.step h3{margin:.15rem 0 .4rem;color:#fff}
-.step p{margin-bottom:.5rem;color:var(--text-2)}
+/* feature grid */
+.grid{display:grid;gap:var(--s5);margin-top:var(--s6)}
+@media(min-width:620px){.grid{grid-template-columns:1fr 1fr}}
+.feat{background:rgba(6,14,24,.5);border:1px solid var(--line);border-top:2px solid rgba(243,198,106,.5);padding:var(--s5)}
+.feat .mark{font-size:1.5rem;line-height:1;display:block;margin-bottom:var(--s3)}
+.feat h3{color:#fff;margin-bottom:.4rem}
+.feat p{color:var(--text-2);font-size:.98rem}
+
+/* steps */
+.steps{list-style:none;counter-reset:step;padding:0;margin:var(--s6) 0 0}
+.steps > li{position:relative;padding-left:3.4rem;margin:var(--s6) 0}
+.steps > li:first-child{margin-top:0}
+.steps > li::before{counter-increment:step;content:counter(step);position:absolute;left:0;top:-.1em;
+  width:2.2rem;height:2.2rem;display:grid;place-items:center;font-family:var(--font-display);font-weight:600;
+  font-size:1.15rem;color:var(--gold);border:1.5px solid var(--gold);border-radius:50%}
+.steps h3{color:#fff;margin-bottom:.35rem}
+.steps p{color:var(--text-2)}
+
+/* checklist */
+.checklist{list-style:none;padding:0;margin:var(--s5) 0 0}
+.checklist li{position:relative;padding-left:1.9rem;margin:var(--s4) 0;color:var(--text-2)}
+.checklist li::before{content:"›";position:absolute;left:.2rem;top:-.05em;color:var(--gold);font-weight:700;font-size:1.2em}
 
 .btn{display:inline-flex;align-items:center;gap:.5rem;background:transparent;color:var(--gold);text-decoration:none;
-  font-weight:600;font-size:.92rem;padding:.55rem 1rem;border:1px solid var(--line-2)}
+  font-weight:600;font-size:.9rem;padding:.55rem 1rem;border:1px solid var(--line-2);margin-top:.4rem}
 .btn:hover{border-color:var(--gold);background:rgba(243,198,106,.08)}
-.copy{display:flex;align-items:stretch;max-width:32rem;margin:.6rem 0 1rem;border:1px solid var(--line-2);background:rgba(4,12,22,.6)}
+.copy{display:flex;align-items:stretch;max-width:32rem;margin:.7rem 0;border:1px solid var(--line-2);background:rgba(4,12,22,.6)}
 .copy code{flex:1;background:none;border:0;padding:.62rem .8rem;overflow:auto;white-space:nowrap;color:#e6eef3}
 .copy button{border:0;border-left:1px solid var(--line-2);background:rgba(127,208,224,.1);color:var(--text);
-  font-family:var(--font-body);font-weight:600;font-size:.82rem;padding:0 1rem;cursor:pointer}
+  font-family:var(--font-body);font-weight:600;font-size:.82rem;padding:0 1.1rem;cursor:pointer}
 .copy button:hover{background:var(--gold);color:var(--gold-ink)}
-pre{background:rgba(3,10,18,.72);border:1px solid var(--line);padding:.9rem 1rem;overflow:auto;
-  font-family:var(--font-mono);font-size:.84rem;line-height:1.55;margin:.4rem 0 1rem;color:#dfeaf0}
-.note{background:rgba(243,198,106,.09);border:1px solid rgba(243,198,106,.28);padding:.8rem 1rem;font-size:.94rem;margin:1rem 0;color:var(--text)}
-.note strong{color:var(--gold)}
-ul.tight{margin:.2rem 0 1rem;padding-left:1.2rem;color:var(--text-2)}
-ul.tight li{margin:.35rem 0}
+pre{background:rgba(3,10,18,.72);border:1px solid var(--line);padding:.95rem 1.1rem;overflow:auto;
+  font-family:var(--font-mono);font-size:.84rem;line-height:1.55;margin:0;color:#dfeaf0}
+.note{background:rgba(243,198,106,.08);border:1px solid rgba(243,198,106,.26);border-left:3px solid var(--gold);
+  padding:var(--s4) var(--s5);margin:var(--s5) 0 0;color:var(--text)}
+.note .label{display:block;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.12em;font-size:.7rem;
+  color:var(--gold);font-weight:700;margin-bottom:.4rem}
+.note p{color:var(--text-2)}
+.note strong{color:#fff}
 
-footer{position:relative;z-index:1;max-width:var(--shell);margin:2rem auto 0;padding:1.6rem clamp(1.1rem,5vw,1.6rem) 3rem;
-  color:var(--text-3);font-size:.88rem;border-top:1px solid var(--line)}
+/* FAQ */
+details{border:1px solid var(--line);background:rgba(6,14,24,.5);margin:var(--s4) 0 0}
+summary{cursor:pointer;font-family:var(--font-display);font-weight:600;font-size:1.06rem;color:#fff;padding:var(--s4) var(--s5);list-style-position:inside}
+details[open] summary{border-bottom:1px solid var(--line)}
+details .body{padding:var(--s4) var(--s5);color:var(--text-2)}
+
+footer{position:relative;z-index:1;max-width:var(--shell);margin:var(--section-gap) auto 0;
+  padding:var(--s6) clamp(1.2rem,5vw,1.9rem) var(--s7);color:var(--text-3);font-size:.9rem;border-top:1px solid var(--line)}
 footer a{color:var(--text-2)}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
@@ -120,130 +155,197 @@ footer a{color:var(--text-2)}
     <span class="brand">Fanad</span>
     <span class="spacer"></span>
     <nav>
+      <a href="#why">Why</a>
+      <a href="#features">Features</a>
       <a href="#install">Install</a>
-      <a href="#model">Connect a model</a>
-      <a href="#docker">Docker</a>
-      <a href="https://github.com/NTBooks/Fanad">GitHub</a>
+      <a class="gh" href="https://github.com/NTBooks/Fanad">GitHub</a>
     </nav>
   </div>
 </header>
 
 <main>
   <div class="wrap">
+
     <div class="hero">
-      <p class="kicker">For Home Assistant</p>
+      <p class="kicker" style="justify-content:center">Fanad · for Home Assistant</p>
       <h1>Get it out of your head.</h1>
-      <p class="lead">A local-first scratchpad for tasks, notes, lists and timers — running as a
-        Home Assistant App. A local model you already run does the parsing. Your data stays on your box.</p>
-      <div><a class="cta" href="#install">Install on Home Assistant ↓</a></div>
-      <div class="trust">
-        <strong>The LLM only parses and ranks what you typed</strong> — it never invents data, and it
-        never acts on your house. House actions (a timer ringing a speaker) are deterministic code you
-        opt into, not model output. No cloud by default, no telemetry.
+      <p class="tagline">The no-nag scratchpad that lives in your Home Assistant — personal tasks
+        and memories, without turning HA into a full-on LLM assistant.</p>
+      <p class="lead">Private, local-first tasks, notes, lists and timers. A bot in your Telegram for
+        the road, a rich web UI in your sidebar at home. No nagging, no guilt streaks — a pad that
+        empties. Your dings can ring the house; your house never leaves the house.</p>
+      <div class="badges" aria-label="At a glance">
+        <span><strong>Local</strong> · no cloud by default</span>
+        <span>No telemetry</span>
+        <span>aarch64 + amd64</span>
+        <span><strong>1,100+</strong> tests</span>
+        <span>Open source · MIT</span>
+      </div>
+      <div class="actions">
+        <a class="cta" href="#install">Install on Home Assistant</a>
+        <a class="cta ghost" href="#features">See what it does</a>
       </div>
     </div>
 
-    <section id="install">
-      <h2>Install on Home Assistant</h2>
-      <p>Fanad ships as a Home Assistant <strong>App (add-on)</strong> — a prebuilt image the Supervisor
-        runs for you. You need Home Assistant <strong>OS</strong> or <strong>Supervised</strong> (the
-        Container/Core types don't have the add-on store — see <a href="#docker">plain Docker</a> below).</p>
+    <section id="why">
+      <p class="kicker">Why it exists</p>
+      <h2>Built to fill the gaps in my own Home Assistant</h2>
+      <p class="section-lead">I run Home Assistant OS at home. It's brilliant at devices and terrible at
+        remembering things <em>for me</em>. I also wanted remote control without exposing anything to the
+        public internet. So I text a bot on Telegram — <code>remind me to take the bins out at 7</code>,
+        <code>timer 12 min</code>, <code>ha turn off the kitchen lights</code> — and it just works, because
+        Telegram is an <strong>outbound connection</strong>: no open ports, no reverse proxy, no cloud tunnel.
+        At home, the full web UI. A lightweight <strong>local LLM</strong> you already run (LM&nbsp;Studio or
+        Ollama) does the parsing and summarizing.</p>
+    </section>
 
-      <div class="step">
-        <div class="n">1</div>
-        <div>
+    <section id="features">
+      <p class="kicker">What you get</p>
+      <h2>Timers, tasks, and remote control — from Telegram or your sidebar</h2>
+      <div class="grid">
+        <div class="feat"><span class="mark">⏲️</span><h3>Server timers</h3>
+          <p>"timer 20 min for the oven" from any phone in the family. The ding announces on your Voice&nbsp;PE
+            or media players, fires a script, or sends a notify.</p></div>
+        <div class="feat"><span class="mark">✅</span><h3>Tasks &amp; reminders</h3>
+          <p>Natural language in — "call the dentist on tuesday" — deadlines, snooze, one-task-at-a-time focus.
+            Dated tasks push straight to your HA calendar.</p></div>
+        <div class="feat"><span class="mark">🏠</span><h3><code>ha</code> from anywhere</h3>
+          <p>"ha turn on porch light", "ha run goodnight" from Telegram — routed to your own Assist agent.
+            Remote control, zero exposed ports.</p></div>
+        <div class="feat"><span class="mark">📝</span><h3>Notes &amp; nested lists</h3>
+          <p>Packing lists, shopping, project outlines. A pad that empties, not a notes app that fills up.
+            Get it out of your head.</p></div>
+        <div class="feat"><span class="mark">💬</span><h3>Three surfaces</h3>
+          <p>Telegram and Slack on the road, a rich web UI in your HA sidebar at home. Same data, same brain,
+            everywhere.</p></div>
+        <div class="feat"><span class="mark">🧩</span><h3>Opt-in modules</h3>
+          <p>Journal with daily/weekly summaries, diet logging, process batches, sub-notebooks, metrics —
+            all off by default. Turn on only what you'll use.</p></div>
+      </div>
+    </section>
+
+    <section id="privacy">
+      <p class="kicker">The privacy part</p>
+      <h2>What the LLM does — and deliberately doesn't</h2>
+      <div class="note">
+        <span class="label">The one-sentence version</span>
+        <p>The LLM only parses and ranks what you typed — it never invents data, and it never acts on your house.</p>
+      </div>
+      <ul class="checklist">
+        <li><strong>Parsing, not agency.</strong> House commands (<code>ha …</code>) are handed to your own
+          Assist agent verbatim — deterministic passthrough, not model output. Dings ringing your speakers are
+          plain code you opt into.</li>
+        <li><strong>Local by default.</strong> Point Fanad at the LM&nbsp;Studio or Ollama box you already run.
+          A <code>mock</code> provider works with no model at all, so you can try it before wiring anything.</li>
+        <li><strong>Cloud is triple-locked.</strong> BYO cloud keys only work behind an explicit
+          <code>LLM_ALLOW_CLOUD</code> flag — off by default, hard-blocked at runtime, hidden in the UI when off.</li>
+        <li><strong>Your data stays put.</strong> SQLite on your box, secrets encrypted (AES-256-GCM), no
+          telemetry, no phone-home. Everything lives in <code>/data</code> and rides along in HA backups.</li>
+      </ul>
+    </section>
+
+    <section id="install">
+      <p class="kicker">Install</p>
+      <h2>Five minutes on Home Assistant</h2>
+      <p class="section-lead">Fanad ships as a Home Assistant <strong>App (add-on)</strong> — a prebuilt image
+        the Supervisor runs for you. You need HA <strong>OS</strong> or <strong>Supervised</strong> (Container/Core
+        users: see plain Docker below).</p>
+      <ol class="steps">
+        <li>
           <h3>Add the Fanad repository</h3>
-          <p>In Home Assistant: <strong>Settings → Add-ons → Add-on store</strong> (newer installs:
-            <strong>Settings → Apps</strong>) → the <strong>⋮</strong> menu → <strong>Repositories</strong>,
-            and add this URL:</p>
+          <p>Settings → Add-ons → Add-on store (newer installs: <strong>Settings → Apps</strong>) → the
+            <strong>⋮</strong> menu → <strong>Repositories</strong>, and add:</p>
           <div class="copy">
             <code id="repo">https://github.com/NTBooks/fanad-ha</code>
             <button type="button" data-copy="repo">Copy</button>
           </div>
-          <p><a class="btn" href="https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2FNTBooks%2Ffanad-ha">Add via My Home Assistant →</a></p>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="n">2</div>
-        <div>
+          <a class="btn" href="https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2FNTBooks%2Ffanad-ha">Add via My Home Assistant →</a>
+        </li>
+        <li>
           <h3>Install &amp; start</h3>
-          <p>Find <strong>Fanad</strong> in the store, click <strong>Install</strong>, then
-            <strong>Start</strong>. The first start pulls a small prebuilt image (works on both
-            64-bit Pi / <code>aarch64</code> and <code>amd64</code>).</p>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="n">3</div>
-        <div>
-          <h3>Open the Web UI</h3>
-          <p>Click <strong>Open Web UI</strong> (or the Fanad sidebar panel). Text a snippet in the chat,
-            watch it get filed, and ask <em>"what should I do?"</em>. Then connect a model.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="model">
-      <h2>Connect a model</h2>
-      <p>Fanad uses a <strong>local</strong> model you already run — <a href="https://lmstudio.ai">LM Studio</a>
-        or <a href="https://ollama.com">Ollama</a>. Open <strong>⚙ Settings</strong>, pick the provider,
-        and enter its address.</p>
+          <p>Find <strong>Fanad</strong> in the store, <strong>Install</strong>, then <strong>Start</strong>.
+            It appears in your sidebar via ingress — no ports to open, no reverse proxy. Works on 64-bit Pi
+            (<code>aarch64</code>) and <code>amd64</code>.</p>
+        </li>
+        <li>
+          <h3>Point it at your model</h3>
+          <p>Open the Web UI → <strong>⚙ Settings</strong>, pick <a href="https://lmstudio.ai">LM&nbsp;Studio</a>
+            or <a href="https://ollama.com">Ollama</a>, and enter its address — or start with the
+            <code>mock</code> provider and wire the model later.</p>
+          <div class="note">
+            <span class="label">Use a LAN IP, not localhost</span>
+            <p>Fanad runs in a container, so <code>localhost</code> is the container — not your desktop. Point it
+              at the model's machine, e.g. <code>http://192.168.1.50:1234/v1</code>. Fanad is light enough for a
+              Pi; the model should live on a real box (the desktop already running LM&nbsp;Studio/Ollama).</p>
+          </div>
+        </li>
+      </ol>
       <div class="note">
-        <strong>Use a LAN IP, not <code>localhost</code>.</strong> Fanad runs in a container, so
-        <code>localhost</code> points at the container — not your desktop. Point it at the machine running
-        the model, e.g. <code>http://192.168.1.50:1234/v1</code> (LM Studio) or
-        <code>http://192.168.1.50:11434/v1</code> (Ollama).
+        <span class="label">Ring the house — already paired</span>
+        <p>As an add-on, Fanad reaches Home Assistant through the Supervisor automatically — no URL or token to
+          paste. Type <code>optin ha</code>, then pick which speakers, scripts, or notifications your timers and
+          reminders should ring.</p>
       </div>
-      <p>No model yet? Set <strong>llm_provider</strong> to <code>mock</code> in the add-on's
-        <strong>Configuration</strong> tab to try the whole flow with a built-in stub. A Pi runs Fanad
-        happily; the model should live on a real box (the desktop already running LM Studio/Ollama).</p>
-    </section>
-
-    <section id="house">
-      <h2>Let it ring the house</h2>
-      <p>Fanad's timers and reminders can ring your Home Assistant speakers, and
-        <code>ha &lt;command&gt;</code> passes straight to your Assist agent. As an add-on it's
-        <strong>already paired</strong> with your Home Assistant — no URL or token to paste.</p>
-      <ul class="tight">
-        <li>Enable the Home Assistant module — <strong>Settings</strong>, or type <code>optin ha</code> in chat.</li>
-        <li>Pick which speakers, scripts, or notifications to ring in <strong>Settings → Home Assistant</strong>.</li>
-      </ul>
-    </section>
-
-    <section id="backups">
-      <h2>Backups &amp; uninstalling</h2>
       <div class="note">
-        <strong>Uninstalling the add-on deletes its data.</strong> Fanad stores everything in
-        <code>/data</code>, which the Supervisor wipes on uninstall. Back up first.
+        <span class="label">Backups &amp; uninstalling</span>
+        <p>Everything lives in <code>/data</code>, which Home Assistant <strong>deletes on uninstall</strong> —
+          back up first. HA's native backups cover it (database and encryption key together).</p>
       </div>
-      <p>Home Assistant's native backups include the add-on's data, so a normal HA backup captures your
-        Fanad database <em>and</em> its encryption key together — restore brings both back.</p>
+      <div class="note">
+        <span class="label">Prefer plain Docker?</span>
+        <p>The same image runs anywhere:</p>
+        <pre>docker run -p 8787:8787 -v fanad:/data ghcr.io/ntbooks/fanad-app:latest</pre>
+      </div>
     </section>
 
-    <section id="docker">
-      <h2>Prefer plain Docker?</h2>
-      <p>The exact same image runs anywhere — for the Container/Core install types or any server:</p>
-      <pre>docker run -p 8787:8787 -v fanad:/data ghcr.io/ntbooks/fanad-app:latest</pre>
-      <p>Then open <code>http://&lt;host&gt;:8787</code>. The add-on also exposes an optional direct
-        <code>8787/tcp</code> port for the same UI/API or the <code>fanad</code> CLI client.</p>
+    <section id="faq">
+      <p class="kicker">Fair questions</p>
+      <h2>The things you're right to ask</h2>
+      <details>
+        <summary>Does it need the cloud?</summary>
+        <div class="body">No. Default is fully local. Cloud API keys exist for people without local-model
+          hardware, and they're behind an explicit opt-in flag that's off by default and hard-blocked at runtime.</div>
+      </details>
+      <details>
+        <summary>Does the AI control my house?</summary>
+        <div class="body">No. The LLM parses your scratchpad text. House commands go through <em>your</em> Assist
+          agent as deterministic passthrough. Fanad never originates house actions except the dings you explicitly
+          configure — and those are plain code, not model output.</div>
+      </details>
+      <details>
+        <summary>Is this AI-generated slop that'll be abandoned in a month?</summary>
+        <div class="body">Fair. The codebase is heavily AI-assisted. That's also why it ships with 1,100+ tests,
+          a versioned migration chain, and a changelog, and why my own family runs it every day. Judge the code;
+          it's all open.</div>
+      </details>
+      <details>
+        <summary>Why not just HA todo lists + Assist?</summary>
+        <div class="body">Those are great for "add milk to the list." Fanad is for everything durable about
+          <em>you</em>: the loops in your head, deadlines, journals, the timer your spouse set from Telegram while
+          you're both cooking. HA runs the house; Fanad remembers the humans — and they ring each other.</div>
+      </details>
+      <details>
+        <summary>What happens to my data if I uninstall?</summary>
+        <div class="body">Everything lives in <code>/data</code>, which Home Assistant deletes on uninstall — so
+          back up first. HA's native backups cover it (database and encryption key together).</div>
+      </details>
     </section>
   </div>
 </main>
 
 <footer>
-  <div>Fanad is open source (<a href="https://github.com/NTBooks/Fanad/blob/main/LICENSE">MIT</a>).
+  <div class="wrap" style="padding:0">Fanad is open source (<a href="https://github.com/NTBooks/Fanad/blob/main/LICENSE">MIT</a>),
+    local-first, and telemetry-free. The LLM only parses what you typed — it never invents, and it never acts on
+    your house.<br>
     App repo: <a href="https://github.com/NTBooks/fanad-ha">fanad-ha</a> ·
-    Main repo: <a href="https://github.com/NTBooks/Fanad">Fanad</a> · Local-first · no cloud by default · no telemetry.</div>
+    Main repo: <a href="https://github.com/NTBooks/Fanad">Fanad</a></div>
 </footer>
 
 <script src="ocean.js"></script>
 <script>
 (function(){
   var c = document.querySelector('.sea canvas');
-  if (c && typeof window.mountOcean === 'function') {
-    try { window.mountOcean(c); } catch (e) { /* backdrop is decorative */ }
-  }
+  if (c && typeof window.mountOcean === 'function') { try { window.mountOcean(c); } catch (e) {} }
   document.querySelectorAll('.copy button[data-copy]').forEach(function(b){
     b.addEventListener('click', function(){
       var t = document.getElementById(b.getAttribute('data-copy')).textContent.trim();
