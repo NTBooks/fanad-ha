@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Fanad for Home Assistant — the no-nag scratchpad, on steroids</title>
-<meta name="description" content="Fanad fills the gap so Home Assistant can store personal tasks and memories without becoming a full-on LLM assistant. Local-first tasks, notes, lists and timers; a Telegram bot for the road, a rich web UI at home. A local LLM parses what you type — it never invents, and it never acts on your house.">
+<title>Fanad for Home Assistant, the no-nag scratchpad, on steroids</title>
+<meta name="description" content="Fanad fills the gap so Home Assistant can store personal tasks and memories without becoming a full-on LLM assistant. Local-first tasks, notes, lists and timers; a Telegram bot for the road, a rich web UI at home. A local LLM parses what you type. It never invents, and it never acts on your house.">
 <meta name="theme-color" content="#08101a">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='24' cy='24' r='23' fill='%23123b4f'/%3E%3Cpath d='M21 34 L22 16 L26 16 L27 34 Z' fill='%23fff'/%3E%3Crect x='19.5' y='14.6' width='9' height='2.2' rx='1' fill='%23fff'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,7 +31,7 @@ html{scroll-behavior:smooth}
 body{margin:0;font-family:var(--font-body);font-size:1.06rem;line-height:1.68;color:var(--text);
   background:var(--navy);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
 
-/* Animated sea — the shared Ocean sim as a fixed portrait column behind everything. */
+/* Animated sea, the shared Ocean sim as a fixed portrait column behind everything. */
 .sea{position:fixed;top:0;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,var(--sea));
   z-index:0;pointer-events:none;border-inline:1px solid rgba(127,208,224,.07)}
 .sea canvas{width:100%;height:100%;display:block;image-rendering:pixelated}
@@ -60,7 +60,7 @@ header{position:sticky;top:0;z-index:5;background:rgba(6,13,22,.7);backdrop-filt
 .bar nav a:hover{color:var(--gold)}
 @media(max-width:640px){.bar nav a{display:none}.bar nav a.gh{display:inline}}
 
-/* Hero — open over the water */
+/* Hero, open over the water */
 .hero{text-align:center;padding:clamp(3.4rem,2rem+7vw,7rem) 0 clamp(2.6rem,1.5rem+4vw,4rem)}
 .hero .tagline{font-family:var(--font-display);font-weight:500;font-size:clamp(1.3rem,1rem+1.4vw,1.7rem);
   color:#eaf3f8;line-height:1.32;max-width:30ch;margin:var(--s5) auto 0;text-shadow:0 1px 16px rgba(0,0,0,.45)}
@@ -77,7 +77,7 @@ header{position:sticky;top:0;z-index:5;background:rgba(6,13,22,.7);backdrop-filt
 .cta.ghost{background:rgba(8,18,30,.5);color:var(--text);border-color:var(--line-2);box-shadow:none;backdrop-filter:blur(6px)}
 .cta.ghost:hover{border-color:var(--gold);color:var(--gold)}
 
-/* Content cards — glass over the sea, roomy */
+/* Content cards, glass over the sea, roomy */
 section{margin:var(--section-gap) 0;padding:var(--section-pad);background:var(--glass);border:1px solid var(--line);
   backdrop-filter:blur(9px);box-shadow:0 30px 70px -34px rgba(0,0,0,.75)}
 section > h2{margin-bottom:var(--s3)}
@@ -169,11 +169,11 @@ footer a{color:var(--text-2)}
     <div class="hero">
       <p class="kicker" style="justify-content:center">Fanad · for Home Assistant</p>
       <h1>Get it out of your head.</h1>
-      <p class="tagline">The no-nag scratchpad that lives in your Home Assistant — personal tasks
+      <p class="tagline">The no-nag scratchpad that lives in your Home Assistant: personal tasks
         and memories, without turning HA into a full-on LLM assistant.</p>
       <p class="lead">Private, local-first tasks, notes, lists and timers. A bot in your Telegram for
-        the road, a rich web UI in your sidebar at home. No nagging, no guilt streaks — a pad that
-        empties. DM your house — it can ping you back.</p>
+        the road, a rich web UI in your sidebar at home. No nagging, no guilt streaks, a pad that
+        empties. DM your house, it can ping you back.</p>
       <div class="badges" aria-label="At a glance">
         <span><strong>Local</strong> · no cloud by default</span>
         <span>No telemetry</span>
@@ -192,8 +192,8 @@ footer a{color:var(--text-2)}
       <h2>Built to fill the gaps in my own Home Assistant</h2>
       <p class="section-lead">I run Home Assistant OS at home. It's brilliant at devices and terrible at
         remembering things <em>for me</em>. I also wanted remote control without exposing anything to the
-        public internet. So I text a bot on Telegram — <code>remind me to take the bins out at 7</code>,
-        <code>timer 12 min</code>, <code>ha turn off the kitchen lights</code> — and it just works, because
+        public internet. So I text a bot on Telegram, <code>remind me to take the bins out at 7</code>,
+        <code>timer 12 min</code>, <code>ha turn off the kitchen lights</code>, and it just works, because
         Telegram is an <strong>outbound connection</strong>: no open ports, no reverse proxy, no cloud tunnel.
         At home, the full web UI. A lightweight <strong>local LLM</strong> you already run (LM&nbsp;Studio or
         Ollama) does the parsing and summarizing.</p>
@@ -201,16 +201,16 @@ footer a{color:var(--text-2)}
 
     <section id="features">
       <p class="kicker">What you get</p>
-      <h2>Timers, tasks, and remote control — from Telegram or your sidebar</h2>
+      <h2>Timers, tasks, and remote control, from Telegram or your sidebar</h2>
       <div class="grid">
         <div class="feat"><span class="mark">⏲️</span><h3>Server timers</h3>
           <p>"timer 20 min for the oven" from any phone in the family. The ding announces on your Voice&nbsp;PE
             or media players, fires a script, or sends a notify.</p></div>
         <div class="feat"><span class="mark">✅</span><h3>Tasks &amp; reminders</h3>
-          <p>Natural language in — "call the dentist on tuesday" — deadlines, snooze, one-task-at-a-time focus.
+          <p>Natural language in ("call the dentist on tuesday"): deadlines, snooze, one-task-at-a-time focus.
             Dated tasks push straight to your HA calendar.</p></div>
         <div class="feat"><span class="mark">🏠</span><h3><code>ha</code> from anywhere</h3>
-          <p>"ha turn on porch light", "ha run goodnight" from Telegram — routed to your own Assist agent.
+          <p>"ha turn on porch light", "ha run goodnight" from Telegram, routed to your own Assist agent.
             Remote control, zero exposed ports.</p></div>
         <div class="feat"><span class="mark">📝</span><h3>Notes &amp; nested lists</h3>
           <p>Packing lists, shopping, project outlines. A pad that empties, not a notes app that fills up.
@@ -219,26 +219,25 @@ footer a{color:var(--text-2)}
           <p>Telegram and Slack on the road, a rich web UI in your HA sidebar at home. Same data, same brain,
             everywhere.</p></div>
         <div class="feat"><span class="mark">🧩</span><h3>Opt-in modules</h3>
-          <p>Journal with daily/weekly summaries, diet logging, process batches, sub-notebooks, metrics —
-            all off by default. Turn on only what you'll use.</p></div>
+          <p>Journal with daily/weekly summaries, diet logging, process batches, sub-notebooks, metrics. All off by default. Turn on only what you'll use.</p></div>
       </div>
     </section>
 
     <section id="privacy">
       <p class="kicker">The privacy part</p>
-      <h2>What the LLM does — and deliberately doesn't</h2>
+      <h2>What the LLM does, and deliberately doesn't</h2>
       <div class="note">
         <span class="label">The one-sentence version</span>
-        <p>The LLM only parses and ranks what you typed — it never invents data, and it never acts on your house.</p>
+        <p>The LLM only parses and ranks what you typed. It never invents data, and it never acts on your house.</p>
       </div>
       <ul class="checklist">
         <li><strong>Parsing, not agency.</strong> House commands (<code>ha …</code>) are handed to your own
-          Assist agent verbatim — deterministic passthrough, not model output. Dings ringing your speakers are
+          Assist agent verbatim: deterministic passthrough, not model output. Dings ringing your speakers are
           plain code you opt into.</li>
         <li><strong>Local by default.</strong> Point Fanad at the LM&nbsp;Studio or Ollama box you already run.
           A <code>mock</code> provider works with no model at all, so you can try it before wiring anything.</li>
         <li><strong>Cloud is triple-locked.</strong> BYO cloud keys only work behind an explicit
-          <code>LLM_ALLOW_CLOUD</code> flag — off by default, hard-blocked at runtime, hidden in the UI when off.</li>
+          <code>LLM_ALLOW_CLOUD</code> flag: off by default, hard-blocked at runtime, hidden in the UI when off.</li>
         <li><strong>Your data stays put.</strong> SQLite on your box, secrets encrypted (AES-256-GCM), no
           telemetry, no phone-home. Everything lives in <code>/data</code> and rides along in HA backups.</li>
       </ul>
@@ -247,7 +246,7 @@ footer a{color:var(--text-2)}
     <section id="install">
       <p class="kicker">Install</p>
       <h2>Five minutes on Home Assistant</h2>
-      <p class="section-lead">Fanad ships as a Home Assistant <strong>App (add-on)</strong> — a prebuilt image
+      <p class="section-lead">Fanad ships as a Home Assistant <strong>App (add-on)</strong>, a prebuilt image
         the Supervisor runs for you. You need HA <strong>OS</strong> or <strong>Supervised</strong> (Container/Core
         users: see plain Docker below).</p>
       <ol class="steps">
@@ -264,32 +263,31 @@ footer a{color:var(--text-2)}
         <li>
           <h3>Install &amp; start</h3>
           <p>Find <strong>Fanad</strong> in the store, <strong>Install</strong>, then <strong>Start</strong>.
-            It appears in your sidebar via ingress — no ports to open, no reverse proxy. Works on 64-bit Pi
+            It appears in your sidebar via ingress, no ports to open, no reverse proxy. Works on 64-bit Pi
             (<code>aarch64</code>) and <code>amd64</code>.</p>
         </li>
         <li>
           <h3>Point it at your model</h3>
           <p>Open the Web UI → <strong>⚙ Settings</strong>, pick <a href="https://lmstudio.ai">LM&nbsp;Studio</a>
-            or <a href="https://ollama.com">Ollama</a>, and enter its address — or start with the
+            or <a href="https://ollama.com">Ollama</a>, and enter its address, or start with the
             <code>mock</code> provider and wire the model later.</p>
           <div class="note">
             <span class="label">Use a LAN IP, not localhost</span>
-            <p>Fanad runs in a container, so <code>localhost</code> is the container — not your desktop. Point it
+            <p>Fanad runs in a container, so <code>localhost</code> is the container, not your desktop. Point it
               at the model's machine, e.g. <code>http://192.168.1.50:1234/v1</code>. Fanad is light enough for a
               Pi; the model should live on a real box (the desktop already running LM&nbsp;Studio/Ollama).</p>
           </div>
         </li>
       </ol>
       <div class="note">
-        <span class="label">Ring the house — already paired</span>
-        <p>As an add-on, Fanad reaches Home Assistant through the Supervisor automatically — no URL or token to
+        <span class="label">Ring the house (already paired)</span>
+        <p>As an add-on, Fanad reaches Home Assistant through the Supervisor automatically, with no URL or token to
           paste. Type <code>optin ha</code>, then pick which speakers, scripts, or notifications your timers and
           reminders should ring.</p>
       </div>
       <div class="note">
         <span class="label">Backups &amp; uninstalling</span>
-        <p>Everything lives in <code>/data</code>, which Home Assistant <strong>deletes on uninstall</strong> —
-          back up first. HA's native backups cover it (database and encryption key together).</p>
+        <p>Everything lives in <code>/data</code>, which Home Assistant <strong>deletes on uninstall</strong>, so back up first. HA's native backups cover it (database and encryption key together).</p>
       </div>
       <div class="note">
         <span class="label">Prefer plain Docker?</span>
@@ -310,7 +308,7 @@ footer a{color:var(--text-2)}
         <summary>Does the AI control my house?</summary>
         <div class="body">No. The LLM parses your scratchpad text. House commands go through <em>your</em> Assist
           agent as deterministic passthrough. Fanad never originates house actions except the dings you explicitly
-          configure — and those are plain code, not model output.</div>
+          configure, and those are plain code, not model output.</div>
       </details>
       <details>
         <summary>Is this AI-generated slop that'll be abandoned in a month?</summary>
@@ -322,11 +320,11 @@ footer a{color:var(--text-2)}
         <summary>Why not just HA todo lists + Assist?</summary>
         <div class="body">Those are great for "add milk to the list." Fanad is for everything durable about
           <em>you</em>: the loops in your head, deadlines, journals, the timer your spouse set from Telegram while
-          you're both cooking. HA runs the house; Fanad remembers the humans — and they ring each other.</div>
+          you're both cooking. HA runs the house; Fanad remembers the humans, and they ring each other.</div>
       </details>
       <details>
         <summary>What happens to my data if I uninstall?</summary>
-        <div class="body">Everything lives in <code>/data</code>, which Home Assistant deletes on uninstall — so
+        <div class="body">Everything lives in <code>/data</code>, which Home Assistant deletes on uninstall, so
           back up first. HA's native backups cover it (database and encryption key together).</div>
       </details>
     </section>
@@ -335,7 +333,7 @@ footer a{color:var(--text-2)}
 
 <footer>
   <div class="wrap" style="padding:0">Fanad is open source (<a href="https://github.com/NTBooks/Fanad/blob/main/LICENSE">MIT</a>),
-    local-first, and telemetry-free. The LLM only parses what you typed — it never invents, and it never acts on
+    local-first, and telemetry-free. The LLM only parses what you typed. It never invents, and it never acts on
     your house.<br>
     App repo: <a href="https://github.com/NTBooks/fanad-ha">fanad-ha</a> ·
     Main repo: <a href="https://github.com/NTBooks/Fanad">Fanad</a></div>
