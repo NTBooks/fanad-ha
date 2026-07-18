@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fanad for Home Assistant — install guide</title>
+<meta name="description" content="Install Fanad on Home Assistant: a local-first scratchpad for tasks, notes, lists and timers. Your data, your LLM, your box.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='24' cy='24' r='23' fill='%234f1223'/%3E%3Cpath d='M21 34 L22 16 L26 16 L27 34 Z' fill='%23fff'/%3E%3Crect x='19.5' y='14.6' width='9' height='2.2' rx='1' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F1E3; --paper-alt:#EFE8D6; --card:#FDFBF5;
+  --ink:#211E17; --ink-2:#4C463A; --ink-3:#6B6353;
+  --rule:rgba(33,30,23,.14); --rule-2:rgba(33,30,23,.30);
+  --accent:#C0392B; --accent-ink:#8F2A1F; --accent-wash:#F5E3DB;
+  --font-display:"Fraunces","Iowan Old Style",Palatino,Georgia,serif;
+  --font-body:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+  --shell:52rem;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#1a1712; --paper-alt:#221d16; --card:#241f18;
+    --ink:#F3ECDC; --ink-2:#cdc4b2; --ink-3:#9c9483;
+    --rule:rgba(243,236,220,.16); --rule-2:rgba(243,236,220,.34);
+    --accent:#E8836F; --accent-ink:#F0A392; --accent-wash:#3a231d;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--font-body);font-size:1.05rem;line-height:1.62;color:var(--ink);
+  background:var(--paper);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.wrap{max-width:var(--shell);margin:0 auto;padding:0 clamp(1.1rem,5vw,2rem)}
+h1,h2,h3{font-family:var(--font-display);font-weight:600;line-height:1.1;letter-spacing:-.011em;color:var(--ink);margin:0 0 .6rem}
+h1{font-size:clamp(2.3rem,1.5rem+3.4vw,3.4rem)}
+h2{font-size:clamp(1.6rem,1.25rem+1.7vw,2.1rem);margin-top:0}
+h3{font-size:1.2rem;line-height:1.3}
+p{margin:0 0 1rem;max-width:60ch}
+a{color:var(--accent-ink);text-underline-offset:2px}
+code{font-family:var(--font-mono);font-size:.9em;background:var(--paper-alt);padding:.12em .4em;border:1px solid var(--rule)}
+hr{border:0;border-top:1px solid var(--rule);margin:0}
+
+/* Header */
+header{border-bottom:1px solid var(--rule);background:var(--paper)}
+.bar{display:flex;align-items:center;gap:.7rem;padding:1rem 0}
+.bar svg{width:34px;height:34px;flex:none}
+.brand{font-family:var(--font-display);font-weight:600;font-size:1.25rem;letter-spacing:-.01em}
+.bar .spacer{flex:1}
+.bar nav a{color:var(--ink-2);text-decoration:none;font-size:.92rem;margin-left:1.1rem}
+.bar nav a:hover{color:var(--accent-ink)}
+@media(max-width:560px){.bar nav{display:none}}
+
+/* Hero */
+.hero{padding:clamp(2.6rem,1.5rem+5vw,5rem) 0 clamp(1.8rem,1rem+3vw,3rem)}
+.kicker{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-ink);font-weight:600;margin:0 0 .9rem}
+.hero p.lead{font-size:1.2rem;color:var(--ink-2);max-width:52ch}
+.trust{margin-top:1.4rem;padding:.85rem 1.1rem;background:var(--card);border:1px solid var(--rule);
+  box-shadow:3px 3px 0 var(--accent-wash);font-size:.96rem;color:var(--ink-2);max-width:56ch}
+.trust strong{color:var(--ink)}
+
+/* Sections */
+section{padding:clamp(2.2rem,1.5rem+3vw,3.4rem) 0;border-top:1px solid var(--rule)}
+.step{display:grid;grid-template-columns:2.2rem 1fr;gap:1rem;margin:1.5rem 0}
+.step .n{font-family:var(--font-display);font-weight:600;font-size:1.3rem;color:var(--accent);
+  width:2.2rem;height:2.2rem;display:grid;place-items:center;border:1.5px solid var(--accent);border-radius:50%}
+.step h3{margin:.15rem 0 .4rem}
+.step p{margin-bottom:.5rem}
+
+/* Buttons + copy row */
+.btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--accent);color:#fff;text-decoration:none;
+  font-weight:600;font-size:.98rem;padding:.7rem 1.15rem;border:1px solid var(--accent-ink);
+  box-shadow:3px 3px 0 rgba(33,30,23,.18)}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 rgba(33,30,23,.2)}
+.btn.ghost{background:transparent;color:var(--accent-ink);box-shadow:none}
+.copy{display:flex;align-items:stretch;max-width:34rem;margin:.6rem 0 1rem;border:1px solid var(--rule-2);background:var(--card)}
+.copy code{flex:1;background:none;border:0;padding:.65rem .8rem;overflow:auto;white-space:nowrap}
+.copy button{border:0;border-left:1px solid var(--rule-2);background:var(--paper-alt);color:var(--ink);
+  font-family:var(--font-body);font-weight:600;font-size:.85rem;padding:0 1rem;cursor:pointer}
+.copy button:hover{background:var(--accent);color:#fff}
+pre{background:var(--card);border:1px solid var(--rule);padding:.9rem 1rem;overflow:auto;font-family:var(--font-mono);font-size:.86rem;line-height:1.55;margin:.4rem 0 1rem}
+.note{background:var(--accent-wash);border:1px solid var(--rule);padding:.8rem 1rem;font-size:.95rem;margin:1rem 0;max-width:60ch}
+.note strong{color:var(--accent-ink)}
+ul.tight{margin:.2rem 0 1rem;padding-left:1.2rem}
+ul.tight li{margin:.3rem 0;max-width:58ch}
+
+footer{border-top:1px solid var(--rule);padding:2.2rem 0 3rem;color:var(--ink-3);font-size:.9rem}
+footer a{color:var(--ink-2)}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fanad">
+      <circle cx="24" cy="24" r="23" fill="#4f1223"/>
+      <path d="M24,12.5 L8,9 L11,17 Z" fill="#f3c66a" opacity="0.5"/>
+      <path d="M24,12.5 L40,9 L37,17 Z" fill="#f3c66a" opacity="0.5"/>
+      <path d="M21,34 L22,16 L26,16 L27,34 Z" fill="#ffffff"/>
+      <rect x="19.5" y="14.6" width="9" height="2.2" rx="1" fill="#ffffff"/>
+      <rect x="22" y="11.3" width="4" height="3.5" fill="#f3c66a"/>
+      <path d="M21.3,11.3 L24,8 L26.7,11.3 Z" fill="#ffffff"/>
+      <circle cx="24" cy="13" r="1.5" fill="#f3c66a"/>
+      <path d="M14,37 q5,-3 10,0 t10,0" stroke="#b45f76" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </svg>
+    <span class="brand">Fanad</span>
+    <span class="spacer"></span>
+    <nav>
+      <a href="#install">Install</a>
+      <a href="#model">Connect a model</a>
+      <a href="#docker">Docker</a>
+      <a href="https://github.com/NTBooks/Fanad">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+  <section class="hero" style="border-top:0">
+    <p class="kicker">For Home Assistant</p>
+    <h1>Fanad — get it out of your head.</h1>
+    <p class="lead">A local-first scratchpad for tasks, notes, lists, timers and light journaling —
+      running as a Home Assistant App. Capture by texting a bot or the built-in web UI; a local
+      model you already run does the parsing. Your data stays on your box.</p>
+    <a class="btn" href="#install">Install on Home Assistant ↓</a>
+    <div class="trust">
+      <strong>The LLM only parses and ranks what you typed</strong> — it never invents data, and it
+      never acts on your house. House actions (a timer ringing a speaker) are deterministic code you
+      opt into, not model output. No cloud by default, no telemetry.
+    </div>
+  </section>
+
+  <section id="install">
+    <h2>Install on Home Assistant</h2>
+    <p>Fanad ships as a Home Assistant <strong>App (add-on)</strong> — a prebuilt image the Supervisor
+      runs for you. You need Home Assistant <strong>OS</strong> or <strong>Supervised</strong> (the
+      Container/Core install types don't have the add-on store — see <a href="#docker">plain Docker</a> below).</p>
+
+    <div class="step">
+      <div class="n">1</div>
+      <div>
+        <h3>Add the Fanad repository</h3>
+        <p>In Home Assistant go to <strong>Settings → Add-ons → Add-on store</strong> (newer installs:
+          <strong>Settings → Apps</strong>), open the <strong>⋮</strong> menu → <strong>Repositories</strong>,
+          and add this URL:</p>
+        <div class="copy">
+          <code id="repo">https://github.com/NTBooks/fanad-ha</code>
+          <button type="button" data-copy="repo">Copy</button>
+        </div>
+        <p><a class="btn ghost" href="https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2FNTBooks%2Ffanad-ha">Add repository via My Home Assistant →</a></p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="n">2</div>
+      <div>
+        <h3>Install &amp; start</h3>
+        <p>Find <strong>Fanad</strong> in the store, click <strong>Install</strong>, then
+          <strong>Start</strong>. The first start pulls a small prebuilt image (works on both
+          64-bit Pi / <code>aarch64</code> and <code>amd64</code>).</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="n">3</div>
+      <div>
+        <h3>Open the Web UI</h3>
+        <p>Click <strong>Open Web UI</strong> (or the Fanad panel in the sidebar). Text a snippet in
+          the chat, watch it get filed, and ask <em>"what should I do?"</em>. Next, connect a model
+          so it can sort things intelligently.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="model">
+    <h2>Connect a model</h2>
+    <p>Fanad uses a <strong>local</strong> model you already run — <a href="https://lmstudio.ai">LM Studio</a>
+      or <a href="https://ollama.com">Ollama</a>. Open <strong>⚙ Settings</strong> in Fanad, pick the
+      provider, and enter its address.</p>
+    <div class="note">
+      <strong>Use a LAN IP, not <code>localhost</code>.</strong> Fanad runs in a container, so
+      <code>localhost</code> points at the container — not your desktop. Point it at the machine
+      running the model, e.g. <code>http://192.168.1.50:1234/v1</code> (LM Studio) or
+      <code>http://192.168.1.50:11434/v1</code> (Ollama).
+    </div>
+    <p>No model yet? Set <strong>llm_provider</strong> to <code>mock</code> in the add-on's
+      <strong>Configuration</strong> tab to try the whole flow with a built-in stub, then wire a real
+      model later. A Pi can run Fanad happily; the model should live on a real box (your desktop
+      already running LM Studio/Ollama).</p>
+  </section>
+
+  <section id="house">
+    <h2>Let it ring the house</h2>
+    <p>Optionally, Fanad's timers and reminders can ring your Home Assistant speakers, and
+      <code>ha &lt;command&gt;</code> passes straight to your Assist agent.</p>
+    <ul class="tight">
+      <li>Enable the Home Assistant module in Fanad — <strong>Settings</strong>, or type
+        <code>optin ha</code> in the chat.</li>
+      <li>Add your HA URL and a long-lived access token in <strong>Settings → Home Assistant</strong>.</li>
+    </ul>
+  </section>
+
+  <section id="backups">
+    <h2>Backups &amp; uninstalling</h2>
+    <div class="note">
+      <strong>Uninstalling the add-on deletes its data.</strong> Fanad stores everything in
+      <code>/data</code> inside the add-on, which the Supervisor wipes on uninstall. Back up first.
+    </div>
+    <p>Home Assistant's native backups include the add-on's data (Fanad sets <code>backup: hot</code>),
+      so a normal HA backup captures your Fanad database <em>and</em> its encryption key together —
+      restore brings both back. A backup that excludes this add-on isn't a Fanad backup.</p>
+  </section>
+
+  <section id="docker">
+    <h2>Prefer plain Docker?</h2>
+    <p>The exact same image runs anywhere — handy for the Container/Core install types or any server:</p>
+    <pre>docker run -p 8787:8787 -v fanad:/data ghcr.io/ntbooks/fanad-app:latest</pre>
+    <p>Then open <code>http://&lt;host&gt;:8787</code>. The add-on also exposes an optional direct
+      <code>8787/tcp</code> port (Configuration → Network) for the same UI/API or the
+      <code>fanad</code> CLI client.</p>
+  </section>
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Fanad is open source (<a href="https://github.com/NTBooks/Fanad/blob/main/LICENSE">MIT</a>).
+      App repo: <a href="https://github.com/NTBooks/fanad-ha">fanad-ha</a> ·
+      Main repo: <a href="https://github.com/NTBooks/Fanad">Fanad</a>.
+      Local-first · no cloud by default · no telemetry.</p>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.copy button[data-copy]').forEach(function(b){
+  b.addEventListener('click', function(){
+    var t = document.getElementById(b.getAttribute('data-copy')).textContent.trim();
+    navigator.clipboard.writeText(t).then(function(){
+      var o = b.textContent; b.textContent = 'Copied ✓';
+      setTimeout(function(){ b.textContent = o; }, 1600);
+    });
+  });
+});
+</script>
+</body>
+</html>
