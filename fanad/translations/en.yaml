@@ -1,0 +1,25 @@
+configuration:
+  timezone:
+    name: Timezone
+    description: IANA name (e.g. America/New_York). Leave blank to follow the server clock / your weather location.
+  llm_provider:
+    name: LLM provider
+    description: Which local model backend parses your text. lmstudio or ollama for a real model; mock to try Fanad with no model at all.
+  lmstudio_base_url:
+    name: LM Studio URL
+    description: e.g. http://192.168.1.50:1234/v1 — use the LAN IP of the box running LM Studio, NOT localhost (Fanad runs in a container).
+  ollama_base_url:
+    name: Ollama URL
+    description: e.g. http://192.168.1.50:11434/v1 — the LAN IP of your Ollama box. Leave blank if using LM Studio.
+  allow_cloud_llm:
+    name: Allow cloud LLM providers
+    description: Off by default. When off, only local providers work and cloud keys are hard-blocked. Turn on only if you have no local model.
+  kek:
+    name: Encryption key (KEK)
+    description: Optional 32-byte base64 key for encrypting stored secrets. Blank uses an on-box bootstrap key. HA backups include it.
+  auth_mode:
+    name: Web login mode
+    description: none (open UI, trusted LAN) or simple (username + password + 2FA). Set up credentials in Settings before switching to simple.
+  auth_reset:
+    name: Break-glass — disable web login
+    description: Turn on and restart to force web login OFF if you're locked out (lost 2FA). Turn back off afterward.

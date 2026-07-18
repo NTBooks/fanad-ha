@@ -1,0 +1,48 @@
+name: Fanad
+version: "0.2.0"
+slug: fanad
+description: Local-first personal scratchpad — tasks, notes, lists, timers. Your LLM, your box.
+url: https://github.com/NTBooks/Fanad
+arch:
+  - aarch64
+  - amd64
+image: ghcr.io/ntbooks/fanad-app
+init: true
+startup: application
+boot: auto
+# Ingress serves the web UI inside the HA sidebar (no extra port needed). ingress_stream is
+# required because Fanad's /api/stream is Server-Sent Events (used by the CLI/HA channels).
+ingress: true
+ingress_port: 8787
+ingress_stream: true
+panel_icon: mdi:notebook-edit-outline
+panel_title: Fanad
+# Optional direct LAN access to the same UI/API — handy for testing, phones without Telegram,
+# or the CLI/TUI client. Ingress is the default; this is opt-in.
+ports:
+  "8787/tcp": null
+ports_description:
+  "8787/tcp": Optional direct web/API access (ingress is the default UI)
+backup: hot
+watchdog: "http://[HOST]:[PORT:8787]/api/health"
+# Only bootstrap config lives here — where the LLM is, the cloud gate, and auth mode. Everything
+# else (LLM keys, Telegram/Slack tokens, HA connection) is set in Fanad's own Settings UI and
+# stored encrypted in the DB, which wins over these. Keeps secrets out of options.json.
+options:
+  timezone: ""
+  llm_provider: lmstudio
+  lmstudio_base_url: ""
+  ollama_base_url: ""
+  allow_cloud_llm: false
+  kek: ""
+  auth_mode: none
+  auth_reset: false
+schema:
+  timezone: str?
+  llm_provider: list(lmstudio|ollama|mock)?
+  lmstudio_base_url: str?
+  ollama_base_url: str?
+  allow_cloud_llm: bool?
+  kek: password?
+  auth_mode: list(none|simple)?
+  auth_reset: bool?
