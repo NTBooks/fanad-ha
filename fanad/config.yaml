@@ -1,5 +1,5 @@
 name: Fanad
-version: "0.2.0"
+version: "0.2.1"
 slug: fanad
 description: Local-first personal scratchpad — tasks, notes, lists, timers. Your LLM, your box.
 url: https://github.com/NTBooks/Fanad
@@ -8,6 +8,10 @@ arch:
   - amd64
 image: ghcr.io/ntbooks/fanad-app
 init: true
+# Auto-pairing: grants a SUPERVISOR_TOKEN + proxied access to HA core, so Fanad can ring the
+# house (timers/reminders, `ha <command>`) with no long-lived token to paste. Opt-in per user;
+# a URL/token set in Fanad's Settings still overrides it.
+homeassistant_api: true
 startup: application
 boot: auto
 # Ingress serves the web UI inside the HA sidebar (no extra port needed). ingress_stream is

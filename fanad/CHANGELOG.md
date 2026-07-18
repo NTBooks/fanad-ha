@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1
+
+- Auto-pairing: Fanad now reaches Home Assistant through the Supervisor proxy, so ringing the
+  house works with no long-lived token to paste. Enable the HA module and pick your outputs.
+
 ## 0.2.0
 
 - First Home Assistant App release of Fanad.

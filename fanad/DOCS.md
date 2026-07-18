@@ -30,8 +30,14 @@ connection — is set in Fanad's own **Settings** UI and stored encrypted in the
 ## Ringing the house (optional)
 
 Fanad can make timer/reminder dings ring your HA speakers and pass `ha <command>` to your Assist
-agent. Enable the Home Assistant module in Fanad (**Settings**, or `optin ha` in chat), then add
-your HA URL + a long-lived access token in **Settings → Home Assistant**.
+agent. Just enable the Home Assistant module in Fanad (**Settings**, or `optin ha` in chat) — as an
+add-on, Fanad is **already paired with your Home Assistant** (it uses the Supervisor's proxy, so
+there's no URL or long-lived token to paste). Then pick which speakers/scripts/notifications to ring
+in **Settings → Home Assistant**. Running Fanad outside HA instead? Paste your HA URL + a long-lived
+token there and it's used instead of the automatic pairing.
+
+This is why the add-on requests Home Assistant API access — it's the one privilege Fanad needs, and
+only so your dings can reach the house. Fanad never acts on your house on its own.
 
 ## Backups & data — read this
 
