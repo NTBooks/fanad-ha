@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0
+
+- Self-service dashboard token: send `token` in chat to mint the read-only credential a Home
+  Assistant dashboard needs to read your Fanad data, no owner-only web panel required. Settings
+  also gains an "Expires" picker (30 / 90 / 365 days / Never) when creating a token.
+
 ## 0.3.0
 
 - Speed dial: the owner can program another Telegram account's 0-9 pad, mapping each slot to a
