@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.0
+
+- Speed dial: the owner can program another Telegram account's 0-9 pad, mapping each slot to a
+  Home Assistant command. That person sends a bare digit (or taps a button) and it fires only
+  that command. Good for housemates or kids who should reach only a few devices.
+- Medication module (opt-in): a calm daily-adherence logger with reminders and a web view.
+- Web UI polish, plus a first-run demo that teaches the "command pad, not a chatbot" model.
+
 ## 0.2.1
 
 - Auto-pairing: Fanad now reaches Home Assistant through the Supervisor proxy, so ringing the
