@@ -294,6 +294,29 @@ footer a{color:var(--text-2)}
       </div>
     </section>
 
+    <section id="sensors">
+      <p class="kicker">On your dashboard</p>
+      <h2>What Fanad exposes to Home Assistant</h2>
+      <p class="section-lead">Fanad publishes a read-only summary your Home Assistant can poll as sensors,
+        so its numbers can live on a wall tablet, drive automations, or turn a lamp red when something is
+        overdue.</p>
+      <div class="grid">
+        <div class="feat"><span class="mark">✅</span><h3>Tasks at a glance</h3>
+          <p>Open, due today, overdue, cleared today, and captured today, plus the next deadline and reminder
+            as timestamps, whether a task is currently active, and today's mood.</p></div>
+        <div class="feat"><span class="mark">🍎</span><h3>Modules &amp; metrics</h3>
+          <p>Only for the modules you use: active timer and next fire, calories today vs target and last
+            weight, journal, list, and batch counts, and your own metrics (water, steps, whatever you track).</p></div>
+        <div class="feat"><span class="mark">🔒</span><h3>Numbers, not your notes</h3>
+          <p>Counts and timestamps only by default; task titles are opt-in. A read-only token can only GET,
+            so it can never post a message or change anything.</p></div>
+      </div>
+      <p>To wire it up, mint a read-only token in <strong>Settings → Security</strong> and point a Home
+        Assistant REST sensor at <code>/api/ha/summary</code> with it. Paste-ready YAML is in the
+        <a href="https://github.com/NTBooks/Fanad/blob/main/HA-SENSOR-GUIDE.md">sensor guide</a>. A native
+        integration (todo entities, an Assist conversation agent, push sensors) is on the roadmap.</p>
+    </section>
+
     <section id="standalone">
       <p class="kicker">No Home Assistant?</p>
       <h2>Run Fanad anywhere</h2>
