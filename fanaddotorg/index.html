@@ -292,9 +292,26 @@ footer a{color:var(--text-2)}
         <span class="label">Backups &amp; uninstalling</span>
         <p>Everything lives in <code>/data</code>, which Home Assistant <strong>deletes on uninstall</strong>, so back up first. HA's native backups cover it (database and encryption key together).</p>
       </div>
+    </section>
+
+    <section id="standalone">
+      <p class="kicker">No Home Assistant?</p>
+      <h2>Run Fanad anywhere</h2>
+      <p class="section-lead">You don't need Home Assistant. Fanad is a plain local app: run it on any
+        machine and use the same web UI, Telegram, and Slack.</p>
+      <p>One line, on any platform with <strong>Node 24+</strong>:</p>
+      <div class="copy">
+        <code id="npx">npx github:NTBooks/Fanad</code>
+        <button type="button" data-copy="npx">Copy</button>
+      </div>
+      <p>That copies Fanad into <code>./fanad</code>, opens a browser setup wizard, installs everything,
+        builds the UI, and starts the server at <code>http://localhost:8787</code>. Point it at your
+        LM&nbsp;Studio or Ollama box in Settings, or choose the <code>mock</code> provider to try it with no
+        model at all. On Windows with no Node, grab the <code>FanadSetup</code> installer from the
+        <a href="https://github.com/NTBooks/Fanad/releases">releases page</a>; it bundles its own runtime.</p>
       <div class="note">
-        <span class="label">Prefer plain Docker?</span>
-        <p>The same image runs anywhere:</p>
+        <span class="label">Or plain Docker</span>
+        <p>The same image the add-on uses runs anywhere. Then open <code>http://&lt;host&gt;:8787</code>.</p>
         <pre>docker run -p 8787:8787 -v fanad:/data ghcr.io/ntbooks/fanad-app:latest</pre>
       </div>
     </section>
