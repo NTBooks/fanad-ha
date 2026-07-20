@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.0
+
+- Dashboard notebook picker: a read-only token can now request a specific notebook's data with
+  `?notebook=<id|main>` on the read endpoints, so a Home Assistant dashboard can switch between your
+  notebooks without changing the account's current one.
+- Speed dial now shows in the web sidebar, and the connect line handed back with a token is a
+  zero-checkout `npx` one-liner (Node 24+), so the CLI client runs from a fresh terminal.
+
 ## 0.4.0
 
 - Self-service dashboard token: send `token` in chat to mint the read-only credential a Home
