@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.1
+
+- Shareable no-login remote-control links: mint a `/r/<token>` link that exposes one guest's
+  speed-dial pad as a web page, so someone can tap your house buttons without a Telegram account or
+  login. Fail-closed (requires web login to mint and use), revocable, with 1 / 7 / 30-day expiry.
+
 ## 0.5.0
 
 - Dashboard notebook picker: a read-only token can now request a specific notebook's data with
