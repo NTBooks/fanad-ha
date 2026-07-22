@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.2
+
+- Speed-dial toggle slots: give a pad number a second (OFF) command and it becomes an on/off toggle
+  that alternates the device, kept in sync across Telegram, the web pad, and the no-login link.
+  Remote-page buttons now fill on press and briefly lock against an accidental double-tap.
+- Task detail view: `/view N` reads a task's full details and lets you edit its steps without
+  starting it, on every surface.
+
 ## 0.5.1
 
 - Shareable no-login remote-control links: mint a `/r/<token>` link that exposes one guest's
