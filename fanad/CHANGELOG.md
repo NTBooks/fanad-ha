@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.3
+
+- Local accounts for family without Telegram: add a household name whose whole surface is its
+  no-login remote-control link, so someone with no Telegram can still tap your house buttons. A
+  local's link can be minted never-expiring, since the link is the account.
+
 ## 0.5.2
 
 - Speed-dial toggle slots: give a pad number a second (OFF) command and it becomes an on/off toggle
